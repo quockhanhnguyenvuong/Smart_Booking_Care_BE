@@ -1,0 +1,33 @@
+{
+  "name": "smart_booking_care",
+  "version": "1.0.0",
+  "description": "website đặt lịch thông minh",
+  "main": "(server.js)",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node src/server.js"
+  },
+  "keywords": [
+    "smart_booking_care",
+    "C1SE.03"
+  ],
+  "author": "C1SE.03",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.5",
+    "express": "^4.18.2",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.6.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/node": "^7.12.10",
+    "@babel/preset-env": "^7.12.10",
+    "nodemon": "^2.0.21",
+    "sequelize-cli": "^6.2.0"
+  }
+}
