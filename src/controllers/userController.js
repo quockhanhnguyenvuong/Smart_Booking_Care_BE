@@ -10,7 +10,6 @@ let handleLogin = async (req, res) => {
       message: "Missing inputs parameter",
     });
   }
-
   let userData = await userService.handleUserLogin(email, password);
   //check email exist
   //compare password

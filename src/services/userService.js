@@ -96,38 +96,78 @@ let getAllUsers = (userId) => {
     }
   });
 };
-
+// ver new
 let createNewUser = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let check = await checkUserEmail(data.email);
-      if (check === true) {
+      if (data.password.length < 8 || data.password.length > 15) {
         resolve({
-          errCode: 1,
-          message: "Your email is already in use, please try another email!",
+          errCode: 2,
+          message: "Password must be between 8 and 15 characters!",
         });
       } else {
-        let hashPasswordFromBcrypt = await hashUserPassword(data.password);
-        await db.User.create({
-          email: data.email,
-          password: hashPasswordFromBcrypt,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          address: data.address,
-          phonenumber: data.phonenumber,
-          gender: data.gender === "1" ? true : false,
-          roleID: data.roleID,
-        });
-        resolve({
-          errCode: 0,
-          message: "OK",
-        });
+        let check = await checkUserEmail(data.email);
+        if (check === true) {
+          resolve({
+            errCode: 1,
+            message: "Your email is already in use, please try another email!",
+          });
+        } else {
+          let hashPasswordFromBcrypt = await hashUserPassword(data.password);
+          await db.User.create({
+            email: data.email,
+            password: hashPasswordFromBcrypt,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            address: data.address,
+            phonenumber: data.phonenumber,
+            gender: data.gender === "1" ? true : false,
+            roleID: data.roleID,
+          });
+          resolve({
+            errCode: 0,
+            message: "OK",
+          });
+        }
       }
     } catch (e) {
       reject(e);
     }
   });
 };
+
+// ver old
+// let createNewUser = (data) => {
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       let check = await checkUserEmail(data.email);
+//       if (check === true) {
+//         resolve({
+//           errCode: 1,
+//           message: "Your email is already in use, please try another email!",
+//         });
+//       } else {
+//         let hashPasswordFromBcrypt = await hashUserPassword(data.password);
+//         await db.User.create({
+//           email: data.email,
+//           password: hashPasswordFromBcrypt,
+//           firstName: data.firstName,
+//           lastName: data.lastName,
+//           address: data.address,
+//           phonenumber: data.phonenumber,
+//           gender: data.gender === "1" ? true : false,
+//           roleID: data.roleID,
+//         });
+//         resolve({
+//           errCode: 0,
+//           message: "OK",
+//         });
+//       }
+//     } catch (e) {
+//       reject(e);
+//     }
+//   });
+// };
 
 let deleteUser = (userId) => {
   return new Promise(async (resolve, reject) => {
