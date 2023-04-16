@@ -14,9 +14,9 @@ module.exports = {
       type: {
         type: Sequelize.STRING,
       },
-      valueEN: {
-        type: Sequelize.STRING,
-      },
+      // valueEN: {
+      //   type: Sequelize.STRING,
+      // },
       valueVI: {
         type: Sequelize.STRING,
       },
