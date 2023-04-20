@@ -24,7 +24,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       gender: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.STRING,
       },
       roleID: {
         type: Sequelize.STRING,
@@ -53,3 +53,4 @@ module.exports = {
     await queryInterface.dropTable("Users");
   },
 };
+// $2a$12$1jKpYGwZk9cVbPqjPT5gX.8UOY85Na934Phr2NISDu9Z6.WKkb0cK

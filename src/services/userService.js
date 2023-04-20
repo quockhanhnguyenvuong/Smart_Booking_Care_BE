@@ -81,8 +81,7 @@ let getAllUsers = (userId) => {
             exclude: ["password"],
           },
         });
-      }
-      if (userId && userId !== "ALL") {
+      } else if (userId && userId !== "ALL") {
         users = await db.User.findOne({
           where: { id: userId },
           attributes: {
@@ -115,8 +114,9 @@ let createNewUser = (data) => {
           lastName: data.lastName,
           address: data.address,
           phonenumber: data.phonenumber,
-          gender: data.gender === "1" ? true : false,
+          gender: data.gender,
           roleID: data.roleID,
+          positionID: data.positionID,
         });
         resolve({
           errCode: 0,
@@ -157,7 +157,6 @@ let updateUserData = (data) => {
       if (!data.id) {
         resolve({
           errCode: 2,
-
           message: "Missing requied parameters!",
         });
       }
@@ -170,6 +169,9 @@ let updateUserData = (data) => {
         user.lastName = data.lastName;
         user.address = data.address;
         user.phonenumber = data.phonenumber;
+        user.roleID = data.roleID;
+        user.gender = data.gender;
+        user.positionID = data.positionID;
 
         await user.save();
 
