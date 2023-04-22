@@ -22,7 +22,7 @@ let handleUserLogin = (email, password) => {
       if (isExist) {
         // user already exist
         let user = await db.User.findOne({
-          attributes: ["email", "roleId", "password"],
+          attributes: ["email", "roleId", "password", "firstName", "lastName"],
           where: { email: email },
           raw: true,
         });
@@ -81,8 +81,7 @@ let getAllUsers = (userId) => {
             exclude: ["password"],
           },
         });
-      }
-      if (userId && userId !== "ALL") {
+      } else if (userId && userId !== "ALL") {
         users = await db.User.findOne({
           where: { id: userId },
           attributes: {
@@ -96,78 +95,39 @@ let getAllUsers = (userId) => {
     }
   });
 };
-// ver new
+
 let createNewUser = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (data.password.length < 8 || data.password.length > 15) {
+      let check = await checkUserEmail(data.email);
+      if (check === true) {
         resolve({
-          errCode: 2,
-          message: "Password must be between 8 and 15 characters!",
+          errCode: 1,
+          message: "Your email is already in use, please try another email!",
         });
       } else {
-        let check = await checkUserEmail(data.email);
-        if (check === true) {
-          resolve({
-            errCode: 1,
-            message: "Your email is already in use, please try another email!",
-          });
-        } else {
-          let hashPasswordFromBcrypt = await hashUserPassword(data.password);
-          await db.User.create({
-            email: data.email,
-            password: hashPasswordFromBcrypt,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            address: data.address,
-            phonenumber: data.phonenumber,
-            gender: data.gender === "1" ? true : false,
-            roleID: data.roleID,
-          });
-          resolve({
-            errCode: 0,
-            message: "OK",
-          });
-        }
+        let hashPasswordFromBcrypt = await hashUserPassword(data.password);
+        await db.User.create({
+          email: data.email,
+          password: hashPasswordFromBcrypt,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          address: data.address,
+          phonenumber: data.phonenumber,
+          gender: data.gender,
+          roleID: data.roleID,
+          positionID: data.positionID,
+        });
+        resolve({
+          errCode: 0,
+          message: "OK",
+        });
       }
     } catch (e) {
       reject(e);
     }
   });
 };
-
-// ver old
-// let createNewUser = (data) => {
-//   return new Promise(async (resolve, reject) => {
-//     try {
-//       let check = await checkUserEmail(data.email);
-//       if (check === true) {
-//         resolve({
-//           errCode: 1,
-//           message: "Your email is already in use, please try another email!",
-//         });
-//       } else {
-//         let hashPasswordFromBcrypt = await hashUserPassword(data.password);
-//         await db.User.create({
-//           email: data.email,
-//           password: hashPasswordFromBcrypt,
-//           firstName: data.firstName,
-//           lastName: data.lastName,
-//           address: data.address,
-//           phonenumber: data.phonenumber,
-//           gender: data.gender === "1" ? true : false,
-//           roleID: data.roleID,
-//         });
-//         resolve({
-//           errCode: 0,
-//           message: "OK",
-//         });
-//       }
-//     } catch (e) {
-//       reject(e);
-//     }
-//   });
-// };
 
 let deleteUser = (userId) => {
   return new Promise(async (resolve, reject) => {
@@ -197,7 +157,6 @@ let updateUserData = (data) => {
       if (!data.id) {
         resolve({
           errCode: 2,
-
           message: "Missing requied parameters!",
         });
       }
@@ -210,6 +169,9 @@ let updateUserData = (data) => {
         user.lastName = data.lastName;
         user.address = data.address;
         user.phonenumber = data.phonenumber;
+        user.roleID = data.roleID;
+        user.gender = data.gender;
+        user.positionID = data.positionID;
 
         await user.save();
 
@@ -229,10 +191,34 @@ let updateUserData = (data) => {
   });
 };
 
+let getAllCodeService = (typeInput) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!typeInput) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing requied parameters",
+        });
+      } else {
+        let res = {};
+        let allcode = await db.Allcode.findAll({
+          where: { type: typeInput },
+        });
+        res.errCode = 0;
+        res.data = allcode;
+        resolve(res);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   handleUserLogin: handleUserLogin,
   getAllUsers: getAllUsers,
   createNewUser: createNewUser,
   deleteUser: deleteUser,
   updateUserData: updateUserData,
+  getAllCodeService: getAllCodeService,
 };

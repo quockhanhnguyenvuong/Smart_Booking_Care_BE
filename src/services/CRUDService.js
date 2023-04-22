@@ -1,6 +1,5 @@
 import bcrypt from "bcryptjs";
 import db from "../models";
-
 const salt = bcrypt.genSaltSync(10);
 
 let createNewUser = (data) => {
@@ -26,11 +25,6 @@ let createNewUser = (data) => {
         throw new Error("Password should not contain whitespace!");
       }
       
-      // Kiểm tra xem mật khẩu có chứa ký tự viết hoa hay không
-      if (!/[A-Z]/.test(data.password)) {
-        throw new Error("Password should contain at least one uppercase letter!");
-      }
-      
       let hashPasswordFromBcrypt = await hashUserPassword(data.password);
       await db.User.create({
         email: data.email,
@@ -42,7 +36,7 @@ let createNewUser = (data) => {
         gender: data.gender === "1" ? true : false,
         roleID: data.roleID,
       });
-      resolve("created a new user success!");
+      resolve("created a new user success!");s
     } catch (e) {
       reject(e);
     }
