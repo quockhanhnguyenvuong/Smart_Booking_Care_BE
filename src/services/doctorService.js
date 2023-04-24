@@ -48,10 +48,7 @@ let getAllDoctors = () => {
 let saveDetailInforDoctor = (inputData) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        !inputData.doctorId ||
-        !inputData.contentHTML ||
-        !inputData.contentMarkdown
+      if ( !inputData.doctorId || !inputData.contentHTML || !inputData.contentMarkdown
       ) {
         resolve({
           errCode: 1,
@@ -61,7 +58,7 @@ let saveDetailInforDoctor = (inputData) => {
         await db.Markdown.create({
           contentHTML: inputData.contentHTML,
           contentMarkdown: inputData.contentMarkdown,
-          description: inputData.description,
+          descriptionHTML: inputData.descriptionHTML,
           doctorId: inputData.doctorId,
         });
         resolve({
@@ -135,15 +132,12 @@ let bulkCreateScheduleService = (data) => {
           raw: true,
         });
 
-        if (existing && existing.length > 0) {
-          existing = existing.map((item) => {
-            item.date = new Date(item.date).getTime();
-            return item;
-          });
-        }
+        console.log('check existing: ', existing);
+        console.log(' check create: ', schedule);
+
         // compare different
         let toCreate = _.differenceWith(schedule, existing, (a, b) => {
-          return a.timeType === b.timeType && a.date === b.date;
+          return a.timeType === b.timeType && +a.date === +b.date;
         });
 
         //create data
@@ -161,10 +155,46 @@ let bulkCreateScheduleService = (data) => {
   });
 };
 
+let getScheduleByDate = (doctorId, date) => {
+  return new Promise( async (resolve, reject) => {
+      try{
+          if( !doctorId || !date){
+              resolve({
+                  errCode: 1,
+                  errMessage: 'Missing required parrameter',
+              })
+          }
+          else{
+            let dataSchedule = await db.Schedule.findAll({
+                where: {
+                    doctorId: doctorId,
+                    date: date,
+                },
+
+                include:[
+                    {model: db.Allcode, as: 'timeTypeData', attributes: ['valueEn', 'valueVi']},
+                ],
+                raw: false,
+                nest: true
+            })
+            if( !dataSchedule) 
+                dataSchedule =[];
+            resolve({
+                errCode: 0,
+                data: dataSchedule,
+            })
+        }
+      }catch(e){
+          reject(e);
+      }
+  })
+}
+
 module.exports = {
   getTopDoctorHome: getTopDoctorHome,
   getAllDoctors: getAllDoctors,
   saveDetailInforDoctor: saveDetailInforDoctor,
   getDetailDoctorService: getDetailDoctorService,
   bulkCreateScheduleService: bulkCreateScheduleService,
+  getScheduleByDate: getScheduleByDate,
 };
