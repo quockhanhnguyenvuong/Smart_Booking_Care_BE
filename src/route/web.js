@@ -22,17 +22,16 @@ let initWebRoutes = (app) => {
   router.put("/api/edit-user", userController.handleEditUser);
   router.delete("/api/delete-user", userController.handleDeleteUser);
   router.get("/api/allcode", userController.getAllcode);
+  router.post("/api/create-new-password", userController.createNewPassword);
 
   router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);
-
   router.get("/api/get-all-doctors", doctorController.getAllDoctors);
   router.post("/api/save-infor-doctors", doctorController.postInforDoctors);
   router.get("/api/get-detail-doctors", doctorController.getDetailDoctorById);
+  router.post("/api/bulk-create-schedule", doctorController.bulkCreateSchedule);
 
   router.post("/api/create-new-specialty", specialtyController.createSpecialty);
   router.get("/api/get-specialty", specialtyController.getAllSpecialty);
-
-  router.post("/api/bulk-create-schedule", doctorController.bulkCreateSchedule);
 
   return app.use("/", router);
 };
