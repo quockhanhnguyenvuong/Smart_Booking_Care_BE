@@ -31,7 +31,7 @@ let initWebRoutes = (app) => {
   router.put("/api/edit-user", userController.handleEditUser);
   router.delete("/api/delete-user", userController.handleDeleteUser);
 
-  router.get("/allcode", userController.getAllCode);
+  router.get("/api/allcode", userController.getAllCode);
   router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);
 
   router.get("/api/get-all-doctors", doctorController.getAllDoctors);
@@ -40,6 +40,7 @@ let initWebRoutes = (app) => {
 
   router.post("/api/create-new-specialty", specialtyController.createSpecialty);
   router.get("/api/get-specialty", specialtyController.getAllSpecialty);
+  router.get("/api/get-extra-infor-doctor-by-id", doctorController.getExtraInforDoctorById);
 
   return app.use("/", router);
 };

@@ -17,7 +17,7 @@ let createSpecialty = (data) => {
         await db.Specialty.create({
           name: data.name,
           image: data.imageBase64,
-          descriptionHTML: data.descriptionHTML,
+          description: data.description,
           descriptionMarkdown: data.descriptionMarkdown,
         });
         resolve({
