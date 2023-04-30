@@ -22,7 +22,21 @@ let handleUserLogin = (email, password) => {
       if (isExist) {
         // user already exist
         let user = await db.User.findOne({
+<<<<<<< HEAD
           attributes: ["email", "roleId", "password", "firstName", "lastName"],
+=======
+          attributes: [
+            "id",
+            "email",
+            "roleId",
+            "password",
+            "firstName",
+            "lastName",
+            "gender",
+            "phonenumber",
+            "address",
+          ],
+>>>>>>> 95fcdcaad8abd23173dd09e80b4adb9ba86ac827
           where: { email: email },
           raw: true,
         });
@@ -129,6 +143,33 @@ let createNewUser = (data) => {
   });
 };
 
+let createNewPasswordService = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let hashPasswordFromBcrypt = await hashUserPassword(data.password);
+      let user = await db.User.findOne({
+        where: { email: data.email },
+        raw: false,
+      });
+      if (user) {
+        user.password = hashPasswordFromBcrypt;
+        await user.save();
+
+        resolve({
+          errCode: 0,
+          message: "Cập nhật mật khẩu thành công!",
+        });
+      }
+      resolve({
+        errCode: 0,
+        message: "OK",
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 let deleteUser = (userId) => {
   return new Promise(async (resolve, reject) => {
     let user = await db.User.findOne({
@@ -221,4 +262,9 @@ module.exports = {
   deleteUser: deleteUser,
   updateUserData: updateUserData,
   getAllCodeService: getAllCodeService,
+<<<<<<< HEAD
 };
+=======
+  createNewPasswordService: createNewPasswordService,
+};
+>>>>>>> 95fcdcaad8abd23173dd09e80b4adb9ba86ac827

@@ -55,23 +55,76 @@ let getDetailDoctorById = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
 let getExtraInforDoctorById = async (req, res) => {
   try {
     let infor = await doctorService.getExtraInforDoctorById(req.query.doctorId);
 
+=======
+let bulkCreateSchedule = async (req, res) => {
+  try {
+    let infor = await doctorService.bulkCreateScheduleService(req.body);
+>>>>>>> 95fcdcaad8abd23173dd09e80b4adb9ba86ac827
     return res.status(200).json(infor);
   } catch (e) {
     console.log(e);
     return res.status(200).json({
       errCode: -1,
+<<<<<<< HEAD
       errMessage: "Error from ther server!",
     });
   }
 };
+=======
+      errMessage: "Error from ther server! ",
+    });
+  }
+};
+
+let getScheduleByDate = async (req, res) => {
+  try {
+    let infor = await doctorService.getScheduleByDate(
+      req.query.doctorId,
+      req.query.date,
+    );
+    return res.status(200).json(infor);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: "Error from server",
+    });
+  }
+};
+
+let getProfileDoctorById = async (req, res) => {
+  try {
+    let infor = await doctorService.getProfileDoctorById(
+      req.query.doctorId,
+      req.query.date,
+    );
+    return res.status(200).json(infor);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: "Error from server",
+    });
+  }
+};
+
+>>>>>>> 95fcdcaad8abd23173dd09e80b4adb9ba86ac827
 module.exports = {
   getTopDoctorHome: getTopDoctorHome,
   getAllDoctors: getAllDoctors,
   postInforDoctors: postInforDoctors,
   getDetailDoctorById: getDetailDoctorById,
+<<<<<<< HEAD
   getExtraInforDoctorById: getExtraInforDoctorById
 };
+=======
+  bulkCreateSchedule: bulkCreateSchedule,
+  getScheduleByDate: getScheduleByDate,
+  getProfileDoctorById: getProfileDoctorById,
+};
+>>>>>>> 95fcdcaad8abd23173dd09e80b4adb9ba86ac827

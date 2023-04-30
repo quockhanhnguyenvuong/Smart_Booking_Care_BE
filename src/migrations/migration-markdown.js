@@ -47,4 +47,8 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable("markdowns");
   },
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> 95fcdcaad8abd23173dd09e80b4adb9ba86ac827

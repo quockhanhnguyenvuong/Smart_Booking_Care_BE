@@ -17,7 +17,11 @@ let createSpecialty = (data) => {
         await db.Specialty.create({
           name: data.name,
           image: data.imageBase64,
+<<<<<<< HEAD
           description: data.description,
+=======
+          descriptionHTML: data.descriptionHTML,
+>>>>>>> 95fcdcaad8abd23173dd09e80b4adb9ba86ac827
           descriptionMarkdown: data.descriptionMarkdown,
         });
         resolve({
@@ -54,4 +58,8 @@ let getAllSpecialty = () => {
 module.exports = {
   createSpecialty: createSpecialty,
   getAllSpecialty: getAllSpecialty,
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> 95fcdcaad8abd23173dd09e80b4adb9ba86ac827

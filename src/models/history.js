@@ -13,7 +13,11 @@ module.exports = (sequelize, DataTypes) => {
   }
   History.init(
     {
+<<<<<<< HEAD
       patientID: DataTypes.INTEGER,
+=======
+      patientId: DataTypes.INTEGER,
+>>>>>>> 95fcdcaad8abd23173dd09e80b4adb9ba86ac827
       doctorId: DataTypes.INTEGER,
       description: DataTypes.TEXT,
       files: DataTypes.TEXT,

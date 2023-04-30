@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Allcode.hasMany(models.User, {
+<<<<<<< HEAD
         foreignKey: "positionID",
         as: "positionData",
       });
@@ -17,6 +18,12 @@ module.exports = (sequelize, DataTypes) => {
       Allcode.hasMany(models.Doctor_Infor, { foreignKey: "priceId", as: "priceTypeData" });
       Allcode.hasMany(models.Doctor_Infor, { foreignKey: "paymentId", as: "paymentTypeData" });
       Allcode.hasMany(models.Doctor_Infor, { foreignKey: "provinceId", as: "provinceTypeData" });
+=======
+        foreignKey: "positionId",
+        as: "positionData",
+      });
+      Allcode.hasMany(models.User, { foreignKey: "gender", as: "genderData" });
+>>>>>>> 95fcdcaad8abd23173dd09e80b4adb9ba86ac827
     }
   }
   Allcode.init(

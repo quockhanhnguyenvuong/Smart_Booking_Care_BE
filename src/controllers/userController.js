@@ -61,6 +61,7 @@ let handleDeleteUser = async (req, res) => {
   let message = await userService.deleteUser(req.body.id);
   return res.status(200).json(message);
 };
+<<<<<<< HEAD
 let getAllCode = async(req,res)=>{
   try{
     let data = await userService.getAllCodeService(req.query.type);
@@ -73,11 +74,37 @@ let getAllCode = async(req,res)=>{
     })
   }
 }
+=======
+
+let getAllcode = async (req, res) => {
+  try {
+    let data = await userService.getAllCodeService(req.query.type);
+    return res.status(200).json(data);
+  } catch (e) {
+    console.log("Get all code error: ", e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: "Error from server",
+    });
+  }
+};
+
+let createNewPassword = async (req, res) => {
+  let message = await userService.createNewPasswordService(req.body);
+  return res.status(200).json(message);
+};
+
+>>>>>>> 95fcdcaad8abd23173dd09e80b4adb9ba86ac827
 module.exports = {
   handleLogin: handleLogin,
   handleGetAllUsers: handleGetAllUsers,
   handleCreateNewUser: handleCreateNewUser,
   handleEditUser: handleEditUser,
   handleDeleteUser: handleDeleteUser,
+<<<<<<< HEAD
   getAllCode: getAllCode
+=======
+  getAllcode: getAllcode,
+  createNewPassword: createNewPassword,
+>>>>>>> 95fcdcaad8abd23173dd09e80b4adb9ba86ac827
 };

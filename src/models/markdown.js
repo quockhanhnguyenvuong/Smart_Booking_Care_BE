@@ -18,8 +18,13 @@ module.exports = (sequelize, DataTypes) => {
       contentMarkdown: DataTypes.TEXT("long"),
       description: DataTypes.TEXT("long"),
       doctorId: DataTypes.INTEGER,
+<<<<<<< HEAD
       // specialtyId: DataTypes.INTEGER,
       // clinicId: DataTypes.INTEGER,
+=======
+      specialtyId: DataTypes.INTEGER,
+      clinicId: DataTypes.INTEGER,
+>>>>>>> 95fcdcaad8abd23173dd09e80b4adb9ba86ac827
     },
     {
       sequelize,
@@ -27,4 +32,8 @@ module.exports = (sequelize, DataTypes) => {
     },
   );
   return Markdown;
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> 95fcdcaad8abd23173dd09e80b4adb9ba86ac827

@@ -1,44 +1,50 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Users", {
+    await queryInterface.createTable("doctor_infor", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      email: {
+      doctorId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      specialtyId: {
+        type: Sequelize.INTEGER,
+      },
+      clinicId: {
+        type: Sequelize.INTEGER,
+      },
+      priceId: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      provinceId: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      paymentId: {
         type: Sequelize.STRING,
       },
-      password: {
+      addressClinic: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      nameClinic: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      note: {
         type: Sequelize.STRING,
       },
-      firstName: {
-        type: Sequelize.STRING,
+      count: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
       },
-      lastName: {
-        type: Sequelize.STRING,
-      },
-      address: {
-        type: Sequelize.STRING,
-      },
-      gender: {
-        type: Sequelize.STRING,
-      },
-      roleID: {
-        type: Sequelize.STRING,
-      },
-      phonenumber: {
-        type: Sequelize.STRING,
-      },
-      positionID: {
-        type: Sequelize.STRING,
-      },
-      image: {
-        type: Sequelize.STRING,
-      },
-
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -50,11 +56,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Users");
+    await queryInterface.dropTable("doctor_infor");
   },
 };
-<<<<<<< HEAD
-// $2a$12$1jKpYGwZk9cVbPqjPT5gX.8UOY85Na934Phr2NISDu9Z6.WKkb0cK
-=======
-// $2a$12$1jKpYGwZk9cVbPqjPT5gX.8UOY85Na934Phr2NISDu9Z6.WKkb0cK
->>>>>>> 95fcdcaad8abd23173dd09e80b4adb9ba86ac827

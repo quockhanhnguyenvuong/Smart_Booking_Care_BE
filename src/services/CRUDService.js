@@ -33,7 +33,7 @@ let createNewUser = (data) => {
         lastName: data.lastName,
         address: data.address,
         phonenumber: data.phonenumber,
-        gender: data.gender === "1" ? true : false,
+        gender: data.gender === "R1" ? true : false,
         roleID: data.roleID,
       });
       resolve("created a new user success!");s
