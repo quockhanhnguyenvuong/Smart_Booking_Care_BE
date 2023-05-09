@@ -22,7 +22,17 @@ let handleUserLogin = (email, password) => {
       if (isExist) {
         // user already exist
         let user = await db.User.findOne({
-          attributes: ["email", "roleId", "password", "firstName", "lastName"],
+          attributes: [
+            "id",
+            "email",
+            "roleId",
+            "password",
+            "firstName",
+            "lastName",
+            "gender",
+            "phonenumber",
+            "address",
+          ],
           where: { email: email },
           raw: true,
         });
@@ -117,13 +127,40 @@ let createNewUser = (data) => {
           gender: data.gender,
           roleID: data.roleID,
           positionID: data.positionID,
-          image: data.avatar,
+          image: data.image,
         });
         resolve({
           errCode: 0,
           message: "OK",
         });
       }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let createNewPasswordService = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let hashPasswordFromBcrypt = await hashUserPassword(data.password);
+      let user = await db.User.findOne({
+        where: { email: data.email },
+        raw: false,
+      });
+      if (user) {
+        user.password = hashPasswordFromBcrypt;
+        await user.save();
+
+        resolve({
+          errCode: 0,
+          message: "Cập nhật mật khẩu thành công!",
+        });
+      }
+      resolve({
+        errCode: 0,
+        message: "OK",
+      });
     } catch (e) {
       reject(e);
     }
@@ -173,7 +210,9 @@ let updateUserData = (data) => {
         user.roleID = data.roleID;
         user.gender = data.gender;
         user.positionID = data.positionID;
-        if(data.avatar){user.image = data.avatar;}
+        if (data.image) {
+          user.image = data.image;
+        }
         await user.save();
 
         resolve({
@@ -222,4 +261,5 @@ module.exports = {
   deleteUser: deleteUser,
   updateUserData: updateUserData,
   getAllCodeService: getAllCodeService,
+  createNewPasswordService: createNewPasswordService,
 };

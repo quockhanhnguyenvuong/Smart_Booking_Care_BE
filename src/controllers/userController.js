@@ -76,6 +76,11 @@ let getAllcode = async (req, res) => {
   }
 };
 
+let createNewPassword = async (req, res) => {
+  let message = await userService.createNewPasswordService(req.body);
+  return res.status(200).json(message);
+};
+
 module.exports = {
   handleLogin: handleLogin,
   handleGetAllUsers: handleGetAllUsers,
@@ -83,4 +88,5 @@ module.exports = {
   handleEditUser: handleEditUser,
   handleDeleteUser: handleDeleteUser,
   getAllcode: getAllcode,
+  createNewPassword: createNewPassword,
 };
