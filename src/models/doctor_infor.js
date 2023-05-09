@@ -9,21 +9,21 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // Doctor_Infor.belongsTo(models.Allcode, {
-      //   foreignKey: "priceId",
-      //   targetKey: "keyMap",
-      //   as: "priceTypeData",
-      // });
-      // Doctor_Infor.belongsTo(models.Allcode, {
-      //   foreignKey: "paymentId",
-      //   targetKey: "keyMap",
-      //   as: "paymentTypeData",
-      // });
-      // Doctor_Infor.belongsTo(models.Allcode, {
-      //   foreignKey: "provinceId",
-      //   targetKey: "keyMap",
-      //   as: "provinceTypeData",
-      // });
+      Doctor_Infor.belongsTo(models.Allcode, {
+        foreignKey: "formality",
+        targetKey: "keyMap",
+        as: "formalityTypeData",
+      });
+      Doctor_Infor.belongsTo(models.Allcode, {
+        foreignKey: "paymentId",
+        targetKey: "keyMap",
+        as: "paymentTypeData",
+      });
+      Doctor_Infor.belongsTo(models.Allcode, {
+        foreignKey: "provinceId",
+        targetKey: "keyMap",
+        as: "provinceTypeData",
+      });
     }
   }
 
@@ -32,9 +32,11 @@ module.exports = (sequelize, DataTypes) => {
       doctorId: DataTypes.INTEGER,
       specialtyId: DataTypes.INTEGER,
       clinicId: DataTypes.INTEGER,
-      priceId: DataTypes.STRING,
+      priceOnId: DataTypes.STRING,
+      priceOffId: DataTypes.STRING,
       provinceId: DataTypes.STRING,
       paymentId: DataTypes.STRING,
+      formality: DataTypes.STRING,
       addressClinic: DataTypes.STRING,
       nameClinic: DataTypes.STRING,
       note: DataTypes.STRING,
@@ -43,6 +45,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Doctor_Infor",
+      freezeTableName: true,
     },
   );
   return Doctor_Infor;

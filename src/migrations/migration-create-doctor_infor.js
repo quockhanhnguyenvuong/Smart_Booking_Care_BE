@@ -18,7 +18,11 @@ module.exports = {
       clinicId: {
         type: Sequelize.INTEGER,
       },
-      priceId: {
+      priceOnId: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      priceOffId: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -34,6 +38,10 @@ module.exports = {
         allowNull: false,
       },
       nameClinic: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      formality: {
         type: Sequelize.STRING,
         allowNull: false,
       },

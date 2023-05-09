@@ -1,7 +1,6 @@
 require("dotenv").config();
-import _ from "lodash";
 import db from "../models/index";
-
+import _ from "lodash";
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
 
 let getTopDoctorHome = (limitInput) => {
@@ -53,12 +52,21 @@ let getAllDoctors = () => {
 
 let saveDetailInforDoctor = (inputData) => {
   return new Promise(async (resolve, reject) => {
+    console.log(inputData);
     try {
       if (
         !inputData.doctorId ||
         !inputData.contentHTML ||
         !inputData.contentMarkdown ||
-        inputData.action
+        !inputData.action ||
+        !inputData.selectPayment ||
+        !inputData.selectProvince ||
+        !inputData.priceOnId ||
+        !inputData.priceOffId ||
+        !inputData.nameClinic ||
+        !inputData.addressClinic ||
+        !inputData.note ||
+        !inputData.formality
       ) {
         resolve({
           errCode: 1,
@@ -84,6 +92,36 @@ let saveDetailInforDoctor = (inputData) => {
             doctorMarkdown.updateAt = new Date();
             await doctorMarkdown.save();
           }
+        }
+
+        let doctorInfor = await db.Doctor_Infor.findOne({
+          where: { doctorId: inputData.doctorId },
+          raw: false,
+        });
+
+        if (doctorInfor) {
+          doctorInfor.doctorId = inputData.doctorId;
+          doctorInfor.priceOnId = inputData.priceOnId;
+          doctorInfor.priceOffId = inputData.priceOffId;
+          doctorInfor.paymentId = inputData.selectPayment;
+          doctorInfor.provinceId = inputData.selectProvince;
+          doctorInfor.formality = inputData.selectFormality;
+          doctorInfor.nameClinic = inputData.nameClinic;
+          doctorInfor.addressClinic = inputData.addressClinic;
+          doctorInfor.note = inputData.note;
+          await doctorInfor.save();
+        } else {
+          await db.Doctor_Infor.create({
+            doctorId: inputData.doctorId,
+            priceOnId: inputData.priceOnId,
+            priceOff: inputData.priceOff,
+            paymentId: inputData.selectPayment.label,
+            provinceId: inputData.selectProvince.label,
+            nameClinic: inputData.nameClinic,
+            formality: inputData.formality.label,
+            addressClinic: inputData.addressClinic,
+            note: inputData.note,
+          });
         }
         resolve({
           errCode: 0,
