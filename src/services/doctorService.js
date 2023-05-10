@@ -290,7 +290,7 @@ let getProfileDoctorByIdService = (inputId) => {
       if (!inputId) {
         resolve({
           errCode: 1,
-          errMessage: "Missing required parrameter",
+          errMessage: "Missing parameters",
         });
       } else {
         let data = await db.User.findOne({
@@ -298,10 +298,18 @@ let getProfileDoctorByIdService = (inputId) => {
             id: inputId,
           },
           attributes: {
-            exclude: ["password"],
+            exclude: ["id", "doctorId"],
           },
           include: [
-            { model: db.Allcode, as: "positionData", attributes: ["valueVi"] },
+            {
+              model: db.Markdown,
+              attributes: ["description", "contentHTML", "contentMarkdown"],
+            },
+            {
+              model: db.Allcode,
+              as: "positionData",
+              attributes: ["valueVi"],
+            },
             {
               model: db.Doctor_Infor,
               attributes: {
@@ -310,7 +318,12 @@ let getProfileDoctorByIdService = (inputId) => {
               include: [
                 {
                   model: db.Allcode,
-                  as: "positionData",
+                  as: "priceOnTypeData",
+                  attributes: ["valueVi"],
+                },
+                {
+                  model: db.Allcode,
+                  as: "priceOffTypeData",
                   attributes: ["valueVi"],
                 },
                 {
@@ -329,7 +342,6 @@ let getProfileDoctorByIdService = (inputId) => {
           raw: false,
           nest: true,
         });
-
         if (data && data.image) {
           data.image = new Buffer(data.image, "base64").toString("binary");
         }
@@ -348,7 +360,6 @@ let getProfileDoctorByIdService = (inputId) => {
 let getExtraInforDoctorByIdService = (inputId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log("id:", inputId);
       if (!inputId) {
         resolve({
           errCode: 1,
