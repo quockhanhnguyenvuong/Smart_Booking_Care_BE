@@ -13,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
         {
           foreignkey: 'timeType', targetKey: 'keyMap', as: 'timeTypeData'
         })
+        // ở đây của email
+      Schedule.belongsTo(models.User, {foreignKey:'doctorId', as:'doctorData'})
     }
   }
   Schedule.init(
