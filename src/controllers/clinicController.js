@@ -35,7 +35,7 @@ let getDetailClinicById =async (req, res) =>{
       errMassage: "Error from the service",
     });
   }
-  
+
 }
 module.exports = {
     createClinic:createClinic,

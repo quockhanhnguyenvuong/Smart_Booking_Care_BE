@@ -18,27 +18,33 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "timeType",
         as: "timeTypeData",
       });
-      // Allcode.hasMany(models.Doctor_Infor, {
-      //   foreignKey: "priceId",
-      //   as: "priceTypeData",
-      // });
-      // Allcode.hasMany(models.Doctor_Infor, {
-      //   foreignKey: "paymentId",
-      //   as: "paymentTypeData",
-      // });
-      // Allcode.hasMany(models.Doctor_Infor, {
-      //   foreignKey: "provinceId",
-      //   as: "provinceTypeData",
-      // });
+      Allcode.hasMany(models.Doctor_Infor, {
+        foreignKey: "formality",
+        as: "formalityTypeData",
+      });
+      Allcode.hasMany(models.Doctor_Infor, {
+        foreignKey: "paymentId",
+        as: "paymentTypeData",
+      });
+      Allcode.hasMany(models.Doctor_Infor, {
+        foreignKey: "provinceId",
+        as: "provinceTypeData",
+      });
+      Allcode.hasMany(models.Doctor_Infor, {
+        foreignKey: "priceOnId",
+        as: "priceOnTypeData",
+      });
+      Allcode.hasMany(models.Doctor_Infor, {
+        foreignKey: "priceOffId",
+        as: "priceOffTypeData",
+      });
     }
   }
   Allcode.init(
     {
-      //keyMap
       keyMap: DataTypes.STRING,
       type: DataTypes.STRING,
-      // valueEN: DataTypes.STRING,
-      valueVi: DataTypes.STRING,
+      valueVI: DataTypes.STRING,
     },
     {
       sequelize,
