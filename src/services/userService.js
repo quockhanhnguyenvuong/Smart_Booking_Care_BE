@@ -99,6 +99,9 @@ let getAllUsers = (userId) => {
           },
         });
       }
+      if (users && users.image) {
+        users.image = new Buffer(users.image, "base64").toString("binary");
+      }
       resolve(users);
     } catch (e) {
       reject(e);
@@ -210,8 +213,11 @@ let updateUserData = (data) => {
         user.roleID = data.roleID;
         user.gender = data.gender;
         user.positionID = data.positionID;
-        if (data.image) {
-          user.image = data.image;
+        // if (data.image) {
+        //   user.image = data.image;
+        // }
+        if (data && data.image) {
+          data.image = new Buffer(data.image, "base64").toString("binary");
         }
         await user.save();
 
