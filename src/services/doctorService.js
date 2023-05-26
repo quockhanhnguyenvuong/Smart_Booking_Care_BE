@@ -2,6 +2,7 @@ require("dotenv").config();
 import db from "../models/index";
 import _, { reject } from "lodash";
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
+import emailServices from "../services/emailServices";
 
 let getTopDoctorHome = (limitInput) => {
   return new Promise(async (resolve, reject) => {
@@ -67,10 +68,13 @@ let saveDetailInforDoctor = (inputData) => {
         !inputData.note ||
         !inputData.selectFormality
       ) {
-        resolve({
-          errCode: 1,
-          errMessage: "Missing parameter!",
-        });
+        let checkObj = checkRequiredFields(inputData);
+        if (checkObj.isValid === false) {
+          resolve({
+            errCode: 1,
+            errMessage: "Missing parameter: ${checkObj.element}",
+          });
+        }
       } else {
         if (inputData.action === "CREATE") {
           await db.Markdown.create({
@@ -90,6 +94,8 @@ let saveDetailInforDoctor = (inputData) => {
             nameClinic: inputData.nameClinic,
             addressClinic: inputData.addressClinic,
             note: inputData.note,
+            specialtyId: inputData.specialtyId,
+            clinicId: inputData.clinicId,
           });
         } else if (inputData.action === "EDIT") {
           let doctorMarkdown = await db.Markdown.findOne({
@@ -117,6 +123,8 @@ let saveDetailInforDoctor = (inputData) => {
             doctorInfor.nameClinic = inputData.nameClinic;
             doctorInfor.addressClinic = inputData.addressClinic;
             doctorInfor.note = inputData.note;
+            doctorInfor.specialtyId = inputData.specialtyId;
+            doctorInfor.clinicId = inputData.clinicId;
             await doctorInfor.save();
           }
         }
@@ -414,6 +422,180 @@ let getExtraInforDoctorByIdService = (inputId) => {
     }
   });
 };
+
+let getListPatientForDoctor = (doctorId, date) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!doctorId || !date) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parrameter",
+        });
+      } else {
+        let data = await db.Booking.findAll({
+          where: {
+            statusId: "S2",
+            doctorId: doctorId,
+            date: date,
+          },
+          attributes: ["bookingType", "reason"],
+          include: [
+            {
+              model: db.User,
+              as: "patientData",
+              attributes: [
+                "email",
+                "firstName",
+                "lastName",
+                "address",
+                "gender",
+              ],
+              include: [
+                {
+                  model: db.Allcode,
+                  as: "genderData",
+                  attributes: ["valueVI"],
+                },
+              ],
+            },
+            {
+              model: db.Allcode,
+              as: "timeTypeDataPatient",
+              attributes: ["valueVI"],
+            },
+          ],
+          raw: false,
+          nest: true,
+        });
+        resolve({
+          errCode: 0,
+          data: data,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let sendRemedy = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (
+        !data.email ||
+        !data.doctorId ||
+        !data.patientId ||
+        !data.timeType ||
+        !data.imgBase64
+      ) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parrameter",
+        });
+      } else {
+        //Update patient status
+        let appointment = await db.Booking.findOne({
+          where: {
+            doctorId: data.doctorId,
+            patientId: data.patientId,
+            timeType: data.timeType,
+            statusId: "S2",
+          },
+          raw: false,
+        });
+
+        if (appointment) {
+          (appointment.statusId = "S3"), await appointment.save();
+        }
+        //send email remedy
+        await emailServices.sendAttachment1(data);
+
+        resolve({
+          errCode: 0,
+          errMessage: "OK",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let sendRefuse = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (
+        !data.email ||
+        !data.doctorId ||
+        !data.patientId ||
+        !data.timeType ||
+        !data.imgBase64
+      ) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parrameter",
+        });
+      } else {
+        //Update patient status
+        let appointment = await db.Booking.findOne({
+          where: {
+            doctorId: data.doctorId,
+            patientId: data.patientId,
+            timeType: data.timeType,
+            statusId: "S2",
+          },
+          raw: false,
+        });
+
+        if (appointment) {
+          (appointment.statusId = "S3"), await appointment.save();
+        }
+        //send email remedy
+        await emailServices.sendAttachment2(data);
+
+        resolve({
+          errCode: 0,
+          errMessage: "OK",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let checkRequiredFields = (inputData) => {
+  let arrFields = [
+    "doctorId",
+    "contentHTML",
+    "contentMarkdown",
+    "action",
+    "selectPayment",
+    "selectProvince",
+    "priceOnId",
+    "priceOffId",
+    "nameClinic",
+    "addressClinic",
+    "note",
+    "selectFormality",
+    "specialtyId",
+    "clinicId",
+  ];
+  let isValid = true;
+  let element = "";
+  for (let i = 0; i < arrFields.length; i++) {
+    if (!inputData[arrFields[i]]) {
+      isValid = false;
+      element = arrFields[i];
+      break;
+    }
+  }
+  return {
+    isValid: isValid,
+    element: element,
+  };
+};
+
 module.exports = {
   getTopDoctorHome: getTopDoctorHome,
   getAllDoctors: getAllDoctors,
@@ -423,4 +605,8 @@ module.exports = {
   getScheduleByDate: getScheduleByDate,
   getProfileDoctorByIdService: getProfileDoctorByIdService,
   getExtraInforDoctorByIdService: getExtraInforDoctorByIdService,
+  getListPatientForDoctor: getListPatientForDoctor,
+  sendRemedy: sendRemedy,
+  sendRefuse: sendRefuse,
+  checkRequiredFields: checkRequiredFields,
 };

@@ -11,14 +11,16 @@ let buildUrlEmail = (doctorId, token) => {
 
 let postBookAppointment = (data) => {
   return new Promise(async (resolve, reject) => {
-    console.log(data);
+    // console.log(data);
     try {
       if (
         !data.email ||
         !data.doctorId ||
         !data.timeType ||
         !data.date ||
-        !data.fullName
+        !data.fullName ||
+        !data.gender ||
+        !data.address
       ) {
         resolve({
           errCode: 1,
@@ -48,7 +50,7 @@ let postBookAppointment = (data) => {
           },
         });
 
-        console.log("Check user: ", user);
+        // console.log("Check user: ", user);
         //create a booking record
         if (user && user[0]) {
           await db.Booking.findOrCreate({
@@ -61,6 +63,7 @@ let postBookAppointment = (data) => {
               timeType: data.timeType,
               token: token,
               bookingType: data.bookingType,
+              reason: data.reason,
             },
           });
         }
@@ -77,8 +80,9 @@ let postBookAppointment = (data) => {
   });
 };
 
-let postVerifyBookAppointment = (data) => {
+let postVerifyBookAppointmentService = (data) => {
   return new Promise(async (resolve, reject) => {
+    // console.log(data);
     try {
       if (!data.token || !data.doctorId) {
         resolve({
@@ -94,7 +98,7 @@ let postVerifyBookAppointment = (data) => {
           },
           raw: false,
         });
-
+        // console.log(appointment);
         if (appointment) {
           appointment.statusId = "S2";
           await appointment.save();
@@ -117,5 +121,5 @@ let postVerifyBookAppointment = (data) => {
 
 module.exports = {
   postBookAppointment: postBookAppointment,
-  postVerifyBookAppointment: postVerifyBookAppointment,
+  postVerifyBookAppointmentService: postVerifyBookAppointmentService,
 };

@@ -29,6 +29,12 @@ module.exports = {
       bookingType: {
         type: Sequelize.STRING,
       },
+      reason: {
+        type: Sequelize.STRING,
+      },
+      yearOld: {
+        type: Sequelize.STRING,
+      },
 
       createdAt: {
         allowNull: false,
