@@ -76,6 +76,20 @@ let getAllcode = async (req, res) => {
   }
 };
 
+let resetPassword = async (req, res) =>{
+  try{
+    let data = await userService.resetPassword(req.body.email);
+    console.log(data)
+    return res.status(200).json(data);
+  }catch (e){
+    console.log('resetPassword: ', e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: 'Error from server'
+    })
+  }
+}
+
 module.exports = {
   handleLogin: handleLogin,
   handleGetAllUsers: handleGetAllUsers,
@@ -83,4 +97,5 @@ module.exports = {
   handleEditUser: handleEditUser,
   handleDeleteUser: handleDeleteUser,
   getAllcode: getAllcode,
+  resetPassword: resetPassword,
 };

@@ -214,7 +214,26 @@ let getAllCodeService = (typeInput) => {
   });
 };
 
-
+let resetPassword = (data) =>
+{
+  return new Promise( async (resolve, reject) =>{
+    try {
+      let user = await db.User.findAll({
+        where: { email: data },
+      });
+      // let user = data.email;
+      if (user) {
+        console.log('user: ', data.email)
+        resolve(true);
+      } else {
+        console.log('user: ', user)
+        resolve(false);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  })
+}
 
 module.exports = {
   handleUserLogin: handleUserLogin,
@@ -223,4 +242,5 @@ module.exports = {
   deleteUser: deleteUser,
   updateUserData: updateUserData,
   getAllCodeService: getAllCodeService,
+  resetPassword: resetPassword,
 };
