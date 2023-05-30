@@ -25,7 +25,6 @@ let getAllSpecialty = async (req, res) => {
     });
   }
 };
-
 let getDetailSpecialtyById = async (req, res) => {
   try {
     let infor = await specialtyService.getDetailSpecialtyById(

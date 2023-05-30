@@ -81,8 +81,6 @@ let sendAttachmentRemedy = async (dataSend) => {
         //   }
         // ]
       });
-      console.log("check infor send email: ");
-      // console.log(info);
       resolve(true);
     } catch (e) {
       reject(e);
@@ -124,7 +122,7 @@ let sendAttachmentRefuse = async (dataSend) => {
         subject: "Kết quả đặt lịch khám bệnh", // Subject line
         html: getBodyHTMLEmailRefuse(dataSend),
       });
-      console.log("check infor send email: ");
+      // console.log("check infor send email: ");
       // console.log(info);
       resolve(true);
     } catch (e) {

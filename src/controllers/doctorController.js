@@ -144,7 +144,7 @@ let sendRemedy = async (req, res) => {
 
 let sendRefuse = async (req, res) => {
   try {
-    let infor = await doctorService.sendRemedy(req.body);
+    let infor = await doctorService.sendRefuse(req.body);
     return res.status(200).json(infor);
   } catch (e) {
     console.log(e);

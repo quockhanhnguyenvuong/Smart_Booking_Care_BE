@@ -16,7 +16,7 @@ let postBookAppointment = (data) => {
       if (
         !data.email ||
         !data.doctorId ||
-        !data.timeType ||
+        // !data.timeType ||
         !data.date ||
         !data.fullName ||
         !data.gender ||

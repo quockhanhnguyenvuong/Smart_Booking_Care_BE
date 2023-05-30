@@ -384,9 +384,13 @@ let getExtraInforDoctorByIdService = (inputId) => {
             doctorId: inputId,
           },
           attributes: {
-            exclude: ["id", "doctorId"],
+            exclude: ["id"],
           },
           include: [
+            {
+              model: db.User,
+              attributes: ["firstName", "lastName"],
+            },
             {
               model: db.Allcode,
               as: "priceOnTypeData",
@@ -425,6 +429,7 @@ let getExtraInforDoctorByIdService = (inputId) => {
 
 let getListPatientForDoctor = (doctorId, date) => {
   return new Promise(async (resolve, reject) => {
+    // console.log(date);
     try {
       if (!doctorId || !date) {
         resolve({
@@ -438,7 +443,13 @@ let getListPatientForDoctor = (doctorId, date) => {
             doctorId: doctorId,
             date: date,
           },
-          attributes: ["bookingType", "reason"],
+          attributes: [
+            "doctorId",
+            "patientId",
+            "bookingType",
+            "reason",
+            "timeType",
+          ],
           include: [
             {
               model: db.User,
@@ -480,14 +491,9 @@ let getListPatientForDoctor = (doctorId, date) => {
 
 let sendRemedy = (data) => {
   return new Promise(async (resolve, reject) => {
+    // console.log("send remedy", data);
     try {
-      if (
-        !data.email ||
-        !data.doctorId ||
-        !data.patientId ||
-        !data.timeType ||
-        !data.imgBase64
-      ) {
+      if (!data.email || !data.doctorId || !data.patientId || !data.timeType) {
         resolve({
           errCode: 1,
           errMessage: "Missing required parrameter",
@@ -505,10 +511,11 @@ let sendRemedy = (data) => {
         });
 
         if (appointment) {
-          (appointment.statusId = "S3"), await appointment.save();
+          appointment.statusId = "S3";
+          await appointment.save();
         }
         //send email remedy
-        await emailServices.sendAttachment1(data);
+        await emailServices.sendAttachmentRemedy(data);
 
         resolve({
           errCode: 0,
@@ -529,7 +536,7 @@ let sendRefuse = (data) => {
         !data.doctorId ||
         !data.patientId ||
         !data.timeType ||
-        !data.imgBase64
+        !data.reason
       ) {
         resolve({
           errCode: 1,
@@ -548,10 +555,10 @@ let sendRefuse = (data) => {
         });
 
         if (appointment) {
-          (appointment.statusId = "S3"), await appointment.save();
+          (appointment.statusId = "S4"), await appointment.save();
         }
         //send email remedy
-        await emailServices.sendAttachment2(data);
+        await emailServices.sendAttachmentRefuse(data);
 
         resolve({
           errCode: 0,

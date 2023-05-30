@@ -1,7 +1,5 @@
-// const db = require("../models");
 require("dotenv").config();
 import db from "../models/index";
-
 let createSpecialty = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -52,7 +50,6 @@ let getAllSpecialty = () => {
     }
   });
 };
-
 let getDetailSpecialtyById = (inputId, location) => {
   return new Promise(async (resolve, reject) => {
     try {

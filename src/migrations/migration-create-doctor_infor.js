@@ -14,9 +14,11 @@ module.exports = {
       },
       specialtyId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
       },
       clinicId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
       },
       priceOnId: {
         type: Sequelize.STRING,
