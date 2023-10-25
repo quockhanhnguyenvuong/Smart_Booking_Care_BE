@@ -52,6 +52,7 @@ let initWebRoutes = (app) => {
   );
   router.post("/api/send-remedy", doctorController.sendRemedy);
   router.post("/api/send-refuse", doctorController.sendRefuse);
+  router.post("/api/get-confirm", doctorController.getConfirm);
 
   router.post(
     "/api/patient-book-appointment",

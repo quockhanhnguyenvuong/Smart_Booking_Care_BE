@@ -15,7 +15,7 @@ let sendSimpleEmail = async (dataSend) => {
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: '"Smart Booking Care " <smartbookingcare@gmail.com>', // sender address
+    from: '"System Booking A Medical Appointment " <systembookingamedicalappointment@gmail.com>', // sender address
     to: dataSend.reciverEmail, // list of receivers
     subject: "Thông tin đặt lịch khám bệnh", // Subject line
     html: getBodyHTMLEmailSimple(dataSend),
@@ -26,12 +26,12 @@ let getBodyHTMLEmailSimple = (dataSend) => {
   let result = "";
   result = `
         <h3>Xin chào ${dataSend.patientName}!</h3>
-        <p>Bạn nhận được email này vì đã đặt lịch khám bệnh online trên Smart Booking Care</p>
+        <p>Bạn nhận được email này vì đã đặt lịch khám bệnh trên System Booking A Medical Appointment/p>
         <p>Thông tin đặt lịch khám bệnh:</p>
         <div><b>Thời gian: ${dataSend.time}</b></div>
         <div><b>Bác sĩ: ${dataSend.doctorName}</b></div>
         <p>Nếu các thông tin trên là đúng sự thật, vui lòng click vào đường link bên dưới để 
-            xác nhận và hoàn tất thủ tục đặt lịch khám bệnh.
+            xác nhận đặt lịch khám bệnh.
         </p>
         <div>
             <a href=${dataSend.redirectLink} target="_blank" >Click here</a>
@@ -45,8 +45,8 @@ let getBodyHTMLEmailRemedy = (dataSend) => {
   let result = "";
   result = `
     <h3>Xin chào ${dataSend.patientName}!</h3>
-    <p>Bạn nhận được email này vì đã đặt lịch khám bệnh online trên Smart Booking Care thành công!</p>
-    
+    <p>Bạn nhận được email này vì đã đặt lịch khám bệnh trên System Booking A Medical Appointment thành công!</p>
+    <p>Hẹn gặp ${dataSend.patientName} vào lúc: ${dataSend.timeType} ${dataSend.date} </p>
     <div>Xin chân thành cảm ơn!</div>
   `; // html body
   return result;
@@ -69,7 +69,7 @@ let sendAttachmentRemedy = async (dataSend) => {
 
       // send mail with defined transport object
       let info = await transporter.sendMail({
-        from: '"Smart Booking Care " <smartbookingcare@gmail.com>', // sender address
+        from: '"System Booking A Medical Appointment " <systembookingamedicalappointment@gmail.com>', // sender address
         to: dataSend.email, // list of receivers
         subject: "Kết quả đặt lịch khám bệnh", // Subject line
         html: getBodyHTMLEmailRemedy(dataSend),
@@ -92,9 +92,10 @@ let getBodyHTMLEmailRefuse = (dataSend) => {
   let result = "";
   result = `
     <h3>Xin chào ${dataSend.patientName}!</h3>
-    <p>Bạn nhận được email này vì đã đặt lịch khám bệnh online trên Smart Booking Care thất bại!</p>
+    <p>Bạn nhận được email này vì đã đặt lịch khám bệnh trên System Booking A Medical Appointment thất bại!</p>
     <p>Vì lý do: ${dataSend.reason}</p>
-    
+    <p>Hẹn gặp ${dataSend.patientName} vào lúc: ${dataSend.date} </p>
+
     <div>Xin chân thành cảm ơn!</div>
   `; // html body
   return result;
@@ -117,7 +118,7 @@ let sendAttachmentRefuse = async (dataSend) => {
 
       // send mail with defined transport object
       let info = await transporter.sendMail({
-        from: '"Smart Booking Care " <smartbookingcare@gmail.com>', // sender address
+        from: '"System Booking A Medical Appointment " <systembookingamedicalappointment@gmail.com>', // sender address
         to: dataSend.email, // list of receivers
         subject: "Kết quả đặt lịch khám bệnh", // Subject line
         html: getBodyHTMLEmailRefuse(dataSend),

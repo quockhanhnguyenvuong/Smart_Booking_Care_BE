@@ -439,11 +439,12 @@ let getListPatientForDoctor = (doctorId, date) => {
       } else {
         let data = await db.Booking.findAll({
           where: {
-            statusId: "S2",
+            // statusId: "S2",
             doctorId: doctorId,
             date: date,
           },
           attributes: [
+            "statusId",
             "doctorId",
             "patientId",
             "bookingType",
@@ -493,7 +494,7 @@ let sendRemedy = (data) => {
   return new Promise(async (resolve, reject) => {
     // console.log("send remedy", data);
     try {
-      if (!data.email || !data.doctorId || !data.patientId || !data.timeType) {
+      if (!data.email || !data.doctorId || !data.patientId) {
         resolve({
           errCode: 1,
           errMessage: "Missing required parrameter",
@@ -504,7 +505,7 @@ let sendRemedy = (data) => {
           where: {
             doctorId: data.doctorId,
             patientId: data.patientId,
-            timeType: data.timeType,
+            // timeType: data.timeType,
             statusId: "S2",
           },
           raw: false,
@@ -527,17 +528,43 @@ let sendRemedy = (data) => {
     }
   });
 };
+let getConfirm = (data) => {
+  return new Promise(async (resolve, reject) => {
+    console.log(data);
+    try {
+      if (!data.doctorId || !data.patientId) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parrameter",
+        });
+      } else {
+        let appointment = await db.Booking.findOne({
+          where: {
+            doctorId: data.doctorId,
+            patientId: data.patientId,
+            statusId: "S3",
+          },
+          raw: false,
+        });
+        if (appointment) {
+          appointment.statusId = "S5";
+          await appointment.save();
+        }
+        resolve({
+          errCode: 0,
+          errMessage: "OK",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 
 let sendRefuse = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (
-        !data.email ||
-        !data.doctorId ||
-        !data.patientId ||
-        !data.timeType ||
-        !data.reason
-      ) {
+      if (!data.email || !data.doctorId || !data.patientId || !data.reason) {
         resolve({
           errCode: 1,
           errMessage: "Missing required parrameter",
@@ -548,7 +575,7 @@ let sendRefuse = (data) => {
           where: {
             doctorId: data.doctorId,
             patientId: data.patientId,
-            timeType: data.timeType,
+            // timeType: data.timeType,
             statusId: "S2",
           },
           raw: false,
@@ -616,4 +643,5 @@ module.exports = {
   sendRemedy: sendRemedy,
   sendRefuse: sendRefuse,
   checkRequiredFields: checkRequiredFields,
+  getConfirm: getConfirm,
 };

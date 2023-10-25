@@ -1,5 +1,5 @@
 {
-  "name": "smart_booking_care",
+  "name": "System_Booking_A_Medical_Appointment",
   "version": "1.0.0",
   "description": "website đặt lịch thông minh",
   "main": "(server.js)",
@@ -8,7 +8,7 @@
     "start": "nodemon --exec babel-node src/server.js"
   },
   "keywords": [
-    "smart_booking_care",
+    "System_Booking_A_Medical_Appointment",
     "C1SE.03"
   ],
   "author": "C1SE.03",

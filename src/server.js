@@ -22,7 +22,7 @@ initWebRoutes(app);
 
 connectDB();
 
-let port = process.env.PORT || 8080;
+let port = process.env.PORT || 8088;
 //Port === undefined => port = 8080
 
 app.listen(port, () => {

@@ -213,12 +213,14 @@ let updateUserData = (data) => {
         user.roleID = data.roleID;
         user.gender = data.gender;
         user.positionID = data.positionID;
-        // if (data.image) {
-        //   user.image = data.image;
-        // }
-        if (data && data.image) {
-          data.image = new Buffer(data.image, "base64").toString("binary");
+        if (data.image) {
+          user.image = data.image;
+        } else {
+          user.image = null;
         }
+        // if (data && data.image) {
+        //   data.image = new Buffer(data.image, "base64").toString("binary");
+        // }
         await user.save();
 
         resolve({

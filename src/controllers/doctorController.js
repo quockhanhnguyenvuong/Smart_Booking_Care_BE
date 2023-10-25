@@ -155,6 +155,19 @@ let sendRefuse = async (req, res) => {
   }
 };
 
+let getConfirm = async (req, res) => {
+  try {
+    let infor = await doctorService.getConfirm(req.body);
+    return res.status(200).json(infor);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: "Error from server",
+    });
+  }
+};
+
 module.exports = {
   getTopDoctorHome: getTopDoctorHome,
   getAllDoctors: getAllDoctors,
@@ -167,4 +180,5 @@ module.exports = {
   getListPatientForDoctor: getListPatientForDoctor,
   sendRemedy: sendRemedy,
   sendRefuse: sendRefuse,
+  getConfirm: getConfirm,
 };
