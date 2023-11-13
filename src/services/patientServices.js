@@ -17,6 +17,7 @@ let postBookAppointment = (data) => {
         !data.email ||
         !data.doctorId ||
         // !data.timeType ||
+        !data.address||
         !data.date ||
         !data.fullName ||
         !data.gender ||
@@ -57,6 +58,7 @@ let postBookAppointment = (data) => {
             statusId: "S1",
             doctorId: data.doctorId,
             patientId: user[0].id,
+            address: data.address,
             date: data.date,
             timeType: data.timeType,
             token: token,

@@ -28,9 +28,9 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.10",
+    "@babel/core": "^7.23.2",
     "@babel/node": "^7.12.10",
-    "@babel/preset-env": "^7.12.10",
+    "@babel/preset-env": "^7.23.2",
     "nodemon": "^2.0.21",
     "sequelize-cli": "^6.2.0"
   }

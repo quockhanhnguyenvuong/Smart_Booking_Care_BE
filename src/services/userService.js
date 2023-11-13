@@ -100,7 +100,7 @@ let getAllUsers = (userId) => {
         });
       }
       if (users && users.image) {
-        users.image = new Buffer(users.image, "base64").toString("binary");
+        users.image = Buffer.from(users.image, "base64").toString("binary");
       }
       resolve(users);
     } catch (e) {
