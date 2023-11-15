@@ -63,8 +63,8 @@ let saveDetailInforDoctor = (inputData) => {
         !inputData.selectProvince ||
         !inputData.priceOnId ||
         !inputData.priceOffId ||
-        !inputData.nameClinic ||
-        !inputData.addressClinic ||
+        // !inputData.nameClinic ||
+        // !inputData.addressClinic ||
         !inputData.note ||
         !inputData.selectFormality
       ) {
@@ -91,8 +91,8 @@ let saveDetailInforDoctor = (inputData) => {
             paymentId: inputData.selectPayment.label,
             provinceId: inputData.selectProvince.label,
             formality: inputData.selectFormality.label,
-            nameClinic: inputData.nameClinic,
-            addressClinic: inputData.addressClinic,
+            // nameClinic: inputData.nameClinic,
+            // addressClinic: inputData.addressClinic,
             note: inputData.note,
             specialtyId: inputData.specialtyId,
             clinicId: inputData.clinicId,
@@ -120,8 +120,8 @@ let saveDetailInforDoctor = (inputData) => {
             doctorInfor.paymentId = inputData.selectPayment.label;
             doctorInfor.provinceId = inputData.selectProvince.label;
             doctorInfor.formality = inputData.selectFormality.label;
-            doctorInfor.nameClinic = inputData.nameClinic;
-            doctorInfor.addressClinic = inputData.addressClinic;
+            // doctorInfor.nameClinic = inputData.nameClinic;
+            // doctorInfor.addressClinic = inputData.addressClinic;
             doctorInfor.note = inputData.note;
             doctorInfor.specialtyId = inputData.specialtyId;
             doctorInfor.clinicId = inputData.clinicId;
@@ -189,6 +189,10 @@ let getDetailDoctorService = (inpuId) => {
                   as: "paymentTypeData",
                   attributes: ["valueVi"],
                 },
+                {
+                  model: db.Clinic,
+                  attributes: ["id", "address", "name"],
+                },
               ],
             },
           ],
@@ -196,7 +200,7 @@ let getDetailDoctorService = (inpuId) => {
           nest: true,
         });
         if (data && data.image) {
-          data.image = new Buffer(data.image, "base64").toString("binary");
+          data.image = Buffer.from(data.image, "base64").toString("binary");
         }
         if (!data) {
           data = {};
@@ -356,7 +360,7 @@ let getProfileDoctorByIdService = (inputId) => {
           nest: true,
         });
         if (data && data.image) {
-          data.image = new Buffer(data.image, "base64").toString("binary");
+          data.image = Buffer.from(data.image, "base64").toString("binary");
         }
         if (!data) data = {};
         resolve({
@@ -450,6 +454,7 @@ let getListPatientForDoctor = (doctorId, date) => {
             "bookingType",
             "reason",
             "timeType",
+            "address",
           ],
           include: [
             {
@@ -459,7 +464,7 @@ let getListPatientForDoctor = (doctorId, date) => {
                 "email",
                 "firstName",
                 "lastName",
-                "address",
+                // "address",
                 "gender",
               ],
               include: [

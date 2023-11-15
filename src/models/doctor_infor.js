@@ -37,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "keyMap",
         as: "priceOffTypeData",
       });
+      Doctor_Infor.belongsTo(models.Clinic, { foreignKey: "clinicId" });
     }
   }
 
@@ -50,8 +51,6 @@ module.exports = (sequelize, DataTypes) => {
       provinceId: DataTypes.STRING,
       paymentId: DataTypes.STRING,
       formality: DataTypes.STRING,
-      addressClinic: DataTypes.STRING,
-      nameClinic: DataTypes.STRING,
       note: DataTypes.STRING,
       count: DataTypes.INTEGER,
     },

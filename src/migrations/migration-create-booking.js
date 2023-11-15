@@ -32,9 +32,12 @@ module.exports = {
       reason: {
         type: Sequelize.STRING,
       },
-      yearOld: {
-        type: Sequelize.STRING,
+      address: {
+        type: Sequelize.TEXT("long"),
       },
+      // yearOld: {
+      //   type: Sequelize.STRING,
+      // },
 
       createdAt: {
         allowNull: false,

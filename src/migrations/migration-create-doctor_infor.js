@@ -35,14 +35,7 @@ module.exports = {
       paymentId: {
         type: Sequelize.STRING,
       },
-      addressClinic: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      nameClinic: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
+
       formality: {
         type: Sequelize.STRING,
         allowNull: false,

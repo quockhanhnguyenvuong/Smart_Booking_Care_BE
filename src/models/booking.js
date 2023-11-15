@@ -31,7 +31,8 @@ module.exports = (sequelize, DataTypes) => {
       token: DataTypes.STRING,
       bookingType: DataTypes.STRING,
       reason: DataTypes.STRING,
-      yearOld: DataTypes.STRING,
+      // yearOld: DataTypes.STRING,
+      address: DataTypes.TEXT("long"),
     },
     {
       sequelize,

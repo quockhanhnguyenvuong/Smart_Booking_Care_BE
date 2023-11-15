@@ -100,7 +100,7 @@ let getAllUsers = (userId) => {
         });
       }
       if (users && users.image) {
-        users.image = new Buffer(users.image, "base64").toString("binary");
+        users.image = Buffer.from(users.image, "base64").toString("binary");
       }
       resolve(users);
     } catch (e) {
@@ -125,7 +125,7 @@ let createNewUser = (data) => {
           password: hashPasswordFromBcrypt,
           firstName: data.firstName,
           lastName: data.lastName,
-          address: data.address,
+          // address: data.address,
           phonenumber: data.phonenumber,
           gender: data.gender,
           roleID: data.roleID,

@@ -15,7 +15,7 @@ let sendSimpleEmail = async (dataSend) => {
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: '"System Booking A Medical Appointment " <systembookingamedicalappointment@gmail.com>', // sender address
+    from: '"System Booking A Medical Appointment " <bookingdoctor2023@gmail.com>', // sender address
     to: dataSend.reciverEmail, // list of receivers
     subject: "Thông tin đặt lịch khám bệnh", // Subject line
     html: getBodyHTMLEmailSimple(dataSend),
@@ -69,7 +69,7 @@ let sendAttachmentRemedy = async (dataSend) => {
 
       // send mail with defined transport object
       let info = await transporter.sendMail({
-        from: '"System Booking A Medical Appointment " <systembookingamedicalappointment@gmail.com>', // sender address
+        from: '"System Booking A Medical Appointment " <bookingdoctor2023@gmail.com>', // sender address
         to: dataSend.email, // list of receivers
         subject: "Kết quả đặt lịch khám bệnh", // Subject line
         html: getBodyHTMLEmailRemedy(dataSend),
@@ -118,7 +118,7 @@ let sendAttachmentRefuse = async (dataSend) => {
 
       // send mail with defined transport object
       let info = await transporter.sendMail({
-        from: '"System Booking A Medical Appointment " <systembookingamedicalappointment@gmail.com>', // sender address
+        from: '"System Booking A Medical Appointment " <bookingdoctor2023@gmail.com>', // sender address
         to: dataSend.email, // list of receivers
         subject: "Kết quả đặt lịch khám bệnh", // Subject line
         html: getBodyHTMLEmailRefuse(dataSend),

@@ -36,6 +36,10 @@ let postBookAppointment = (data) => {
           redirectLink: buildUrlEmail(data.doctorId, token),
         });
 
+        // let user = await db.User.findOne({
+        //   where: { email: data.email },
+        // });
+
         let user = await db.User.findOrCreate({
           where: { email: data.email },
           defaults: {
@@ -62,6 +66,7 @@ let postBookAppointment = (data) => {
             token: token,
             bookingType: data.bookingType,
             reason: data.reason,
+            address: data.address,
           });
         }
 
