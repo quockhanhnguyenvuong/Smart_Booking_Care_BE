@@ -196,7 +196,7 @@ let getDetailDoctorService = (inpuId) => {
           nest: true,
         });
         if (data && data.image) {
-          data.image = new Buffer(data.image, "base64").toString("binary");
+          data.image = Buffer.from(data.image, "base64").toString("binary");
         }
         if (!data) {
           data = {};
@@ -356,7 +356,7 @@ let getProfileDoctorByIdService = (inputId) => {
           nest: true,
         });
         if (data && data.image) {
-          data.image = new Buffer(data.image, "base64").toString("binary");
+          data.image =  Buffer.from(data.image, "base64").toString("binary");
         }
         if (!data) data = {};
         resolve({
