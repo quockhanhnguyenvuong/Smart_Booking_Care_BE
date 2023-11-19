@@ -77,6 +77,10 @@ let initWebRoutes = (app) => {
     "/api/get-detail-specialty-by-id",
     specialtyController.getDetailSpecialtyById,
   );
+  
+  router.post("/api/check-email", userController.handleCheckAccount);
+  router.post("/api/check-OTP-reset-Password", userController.handleResetPassword);
+
   return app.use("/", router);
 };
 
