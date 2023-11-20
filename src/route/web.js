@@ -9,6 +9,7 @@ import clinicController from "../controllers/clinicController";
 let router = express.Router();
 
 let initWebRoutes = (app) => {
+  //test
   router.get("/", homeController.getHomePage);
   router.get("/about", homeController.getAboutPage);
   router.get("/crud", homeController.getCRUD);
@@ -18,6 +19,7 @@ let initWebRoutes = (app) => {
   router.post("/put-crud", homeController.putCRUD);
   router.get("/delete-crud", homeController.deleteCRUD);
 
+  //user
   router.post("/api/login", userController.handleLogin);
   router.get("/api/get-all-users", userController.handleGetAllUsers);
   router.post("/api/create-new-user", userController.handleCreateNewUser);
@@ -25,7 +27,9 @@ let initWebRoutes = (app) => {
   router.delete("/api/delete-user", userController.handleDeleteUser);
   router.get("/api/allcode", userController.getAllcode);
   router.post("/api/create-new-password", userController.createNewPassword);
+  router.post("/api/create-new-password", userController.createNewPassword);
 
+  //doctor
   router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);
   router.get("/api/get-all-doctors", doctorController.getAllDoctors);
   router.post("/api/save-infor-doctors", doctorController.postInforDoctors);
@@ -54,6 +58,7 @@ let initWebRoutes = (app) => {
   router.post("/api/send-refuse", doctorController.sendRefuse);
   router.post("/api/get-confirm", doctorController.getConfirm);
 
+  //patient
   router.post(
     "/api/patient-book-appointment",
     patientController.postBookAppointment,
@@ -63,20 +68,29 @@ let initWebRoutes = (app) => {
     patientController.postVerifyBookAppointment,
   );
 
+  //specialty
   router.post("/api/create-new-specialty", specialtyController.createSpecialty);
   router.get("/api/get-specialty", specialtyController.getAllSpecialty);
+  router.get(
+    "/api/get-detail-specialty-by-id",
+    specialtyController.getDetailSpecialtyById,
+  );
+  router.delete(
+    "/api/delete-specialty",
+    specialtyController.handleDeleteSpecialty,
+  );
+  router.put("/api/edit-specialty", specialtyController.handleEditSpecialty);
 
-  router.post("/api/create-new-password", userController.createNewPassword);
+  //clinic
   router.post("/api/create-new-clinic", clinicController.createClinic);
   router.get("/api/get-clinic", clinicController.getAllClinic);
   router.get(
     "/api/get-detail-clinic-by-id",
     clinicController.getDetailClinicById,
   );
-  router.get(
-    "/api/get-detail-specialty-by-id",
-    specialtyController.getDetailSpecialtyById,
-  );
+  router.delete("/api/delete-clinic", clinicController.handleDeleteClinic);
+  router.put("/api/edit-clinic", clinicController.handleEditClinic);
+
   return app.use("/", router);
 };
 

@@ -5,7 +5,7 @@ let createClinic = (data) => {
       if (
         !data.name ||
         !data.address ||
-        !data.imageBase64 ||
+        !data.image ||
         !data.descriptionHTML ||
         !data.descriptionMarkdown
       ) {
@@ -17,7 +17,7 @@ let createClinic = (data) => {
         await db.Clinic.create({
           name: data.name,
           address: data.address,
-          image: data.imageBase64,
+          image: data.image,
           descriptionHTML: data.descriptionHTML,
           descriptionMarkdown: data.descriptionMarkdown,
         });
@@ -91,8 +91,75 @@ let getDetailClinicById = (inputId) => {
     }
   });
 };
+
+let deleteClinic = (clinicId) => {
+  return new Promise(async (resolve, reject) => {
+    let clinic = await db.Clinic.findOne({
+      where: { id: clinicId },
+    });
+    if (!clinic) {
+      resolve({
+        errCode: 2,
+        errMessage: "The clinic is not exist!",
+      });
+    }
+    await db.Clinic.destroy({
+      where: { id: clinicId },
+    });
+
+    resolve({
+      errCode: 0,
+      message: "The clinic is deleted!",
+    });
+  });
+};
+
+let editClinicService = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.id) {
+        resolve({
+          errCode: 2,
+          message: "Missing requied parameters!",
+        });
+      }
+      let clinic = await db.Clinic.findOne({
+        where: { id: data.id },
+        raw: false,
+      });
+      if (clinic) {
+        clinic.name = data.name;
+        clinic.address = data.address;
+        clinic.descriptionHTML = data.descriptionHTML;
+        clinic.descriptionMarkdown = data.descriptionMarkdown;
+        if (data.image) {
+          clinic.image = data.image;
+        } else {
+          clinic.image = null;
+        }
+
+        await clinic.save();
+
+        resolve({
+          errCode: 0,
+          message: "Update the clinic succeeds!",
+        });
+      } else {
+        resolve({
+          errCode: 1,
+          errMessage: "clinic is not found!",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   createClinic: createClinic,
   getAllClinic: getAllClinic,
   getDetailClinicById: getDetailClinicById,
+  deleteClinic: deleteClinic,
+  editClinicService: editClinicService,
 };

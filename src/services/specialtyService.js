@@ -97,8 +97,73 @@ let getDetailSpecialtyById = (inputId, location) => {
   });
 };
 
+let deleteSpecialty = (specialtyId) => {
+  return new Promise(async (resolve, reject) => {
+    let specialty = await db.Specialty.findOne({
+      where: { id: specialtyId },
+    });
+    if (!specialty) {
+      resolve({
+        errCode: 2,
+        errMessage: "The specialty is not exist!",
+      });
+    }
+    await db.Specialty.destroy({
+      where: { id: specialtyId },
+    });
+
+    resolve({
+      errCode: 0,
+      message: "The specialty is deleted!",
+    });
+  });
+};
+
+let editSpecialtyService = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.id) {
+        resolve({
+          errCode: 2,
+          message: "Missing requied parameters!",
+        });
+      }
+      let specialty = await db.Specialty.findOne({
+        where: { id: data.id },
+        raw: false,
+      });
+      if (specialty) {
+        specialty.name = data.name;
+        specialty.descriptionHTML = data.descriptionHTML;
+        specialty.descriptionMarkdown = data.descriptionMarkdown;
+        if (data.image) {
+          specialty.image = data.image;
+        } else {
+          specialty.image = null;
+        }
+
+        await specialty.save();
+
+        resolve({
+          errCode: 0,
+          message: "Update the specialty succeeds!",
+        });
+      } else {
+        resolve({
+          errCode: 1,
+          errMessage: "specialty is not found!",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   createSpecialty: createSpecialty,
   getAllSpecialty: getAllSpecialty,
   getDetailSpecialtyById: getDetailSpecialtyById,
+  deleteSpecialty: deleteSpecialty,
+  editSpecialtyService: editSpecialtyService,
 };

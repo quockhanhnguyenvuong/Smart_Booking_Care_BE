@@ -32,10 +32,12 @@ let handleUserLogin = (email, password) => {
             "gender",
             "phonenumber",
             "address",
+            "image",
           ],
           where: { email: email },
           raw: true,
         });
+
         if (user) {
           //compare password
           let check = await bcrypt.compareSync(password, user.password);
@@ -47,6 +49,11 @@ let handleUserLogin = (email, password) => {
           } else {
             userData.errCode = 3;
             userData.errMessage = "Wrong password!";
+          }
+          if (user.image) {
+            userData.user.image = Buffer.from(user.image, "base64").toString(
+              "binary",
+            );
           }
         } else {
           userData.errCode = 2;
@@ -221,6 +228,7 @@ let updateUserData = (data) => {
         // if (data && data.image) {
         //   data.image = new Buffer(data.image, "base64").toString("binary");
         // }
+
         await user.save();
 
         resolve({
