@@ -297,7 +297,7 @@ let checkAccountUser = (data) => {
         await updateUserCode(OTP, data.email);
         resolve({
           errCode: 0,
-          message: "OK",
+          message: "Finish Send",
         });
       } else {
         resolve({
@@ -378,7 +378,7 @@ const updateUserCode = async (code,email) =>{
 
 let handleResetPassword = (data) => {
   return new Promise(async (resolve, reject) => {
-    console.log("data OTP",data.code); 
+    // console.log("data OTP",data.code); 
     try {
       let check = await checkUserCode(data.code, data.email);
       
@@ -423,7 +423,7 @@ let resetUserPassword = (data) => {
       });
       if (user) {
         user.password = newPassword;
-        console.log("hash password: ",newPassword)
+        // console.log("hash password: ",newPassword)
         await user.save();
         resolve({
           errCode: 0,
@@ -440,6 +440,34 @@ let resetUserPassword = (data) => {
     }
   });
 };
+
+let checkPassword = (data) => {
+  return new Promise(async (resolve, reject) => {
+    console.log("password1: ",data.data.newPassword); 
+    console.log("password2: ",data.data.checkNewPassword); 
+    try {
+      let password1 = data.data.newPassword;
+      let password2 = data.data.checkNewPassword;
+      if (password1 === password2) {
+        //update password
+        // await resetUserPassword(data);
+        resolve({
+          errCode: 0,
+          message: "2 password trùng nhau",
+        });
+      } else {
+        resolve({
+          errCode: 1,
+          message: "2 password không trùng nhau!!!",
+          
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   handleUserLogin: handleUserLogin,
   getAllUsers: getAllUsers,
@@ -452,4 +480,5 @@ module.exports = {
   updateUserCode: updateUserCode,
   handleResetPassword: handleResetPassword,
   resetUserPassword: resetUserPassword,
+  checkPassword: checkPassword,
 };

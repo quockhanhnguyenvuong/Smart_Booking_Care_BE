@@ -80,6 +80,7 @@ let initWebRoutes = (app) => {
   
   router.post("/api/check-email", userController.handleCheckAccount);
   router.post("/api/check-OTP-reset-Password", userController.handleResetPassword);
+  router.post("/api/check-reset-password", userController.checkPassword);
 
   return app.use("/", router);
 };

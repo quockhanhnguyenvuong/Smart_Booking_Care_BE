@@ -91,6 +91,11 @@ let handleResetPassword = async (req, res) => {
   return res.status(200).json(message);
 };
 
+let checkPassword = async (req, res) => {
+  let message = await userService.checkPassword(req.body);
+  return res.status(200).json(message);
+};
+
 module.exports = {
   handleLogin: handleLogin,
   handleGetAllUsers: handleGetAllUsers,
@@ -101,4 +106,5 @@ module.exports = {
   createNewPassword: createNewPassword,
   handleCheckAccount: handleCheckAccount,
   handleResetPassword: handleResetPassword,
+  checkPassword: checkPassword,
 };
