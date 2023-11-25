@@ -28,6 +28,11 @@ let initWebRoutes = (app) => {
   router.get("/api/allcode", userController.getAllcode);
   router.post("/api/create-new-password", userController.createNewPassword);
   router.post("/api/create-new-password", userController.createNewPassword);
+  router.post("/api/check-email", userController.handleCheckAccount);
+  router.post(
+    "/api/check-OTP-reset-Password",
+    userController.handleResetPassword,
+  );
 
   //doctor
   router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);

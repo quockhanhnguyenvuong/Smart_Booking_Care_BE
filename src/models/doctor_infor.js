@@ -38,6 +38,7 @@ module.exports = (sequelize, DataTypes) => {
         as: "priceOffTypeData",
       });
       Doctor_Infor.belongsTo(models.Clinic, { foreignKey: "clinicId" });
+      Doctor_Infor.belongsTo(models.Specialty, { foreignKey: "specialtyId" });
     }
   }
 
