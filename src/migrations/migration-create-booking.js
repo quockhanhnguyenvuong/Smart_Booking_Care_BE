@@ -17,9 +17,6 @@ module.exports = {
       patientId: {
         type: Sequelize.INTEGER,
       },
-      address: {
-        type: Sequelize.STRING,
-      },
       date: {
         type: Sequelize.STRING,
       },
@@ -35,10 +32,9 @@ module.exports = {
       reason: {
         type: Sequelize.STRING,
       },
-      yearOld: {
-        type: Sequelize.STRING,
+      address: {
+        type: Sequelize.TEXT("long"),
       },
-
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

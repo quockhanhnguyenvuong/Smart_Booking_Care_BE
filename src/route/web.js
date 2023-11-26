@@ -53,6 +53,9 @@ let initWebRoutes = (app) => {
   router.post("/api/send-remedy", doctorController.sendRemedy);
   router.post("/api/send-refuse", doctorController.sendRefuse);
   router.post("/api/get-confirm", doctorController.getConfirm);
+  router.post("/api/get-cancel", doctorController.getCancel);
+  router.post("/api/send-warning", doctorController.sendWarning);
+  
 
   router.post(
     "/api/patient-book-appointment",
@@ -77,6 +80,11 @@ let initWebRoutes = (app) => {
     "/api/get-detail-specialty-by-id",
     specialtyController.getDetailSpecialtyById,
   );
+  router.get("/api/get-patient-for-history", doctorController.getListPatientForHistory);
+  router.get("/api/get-list-patient-online",doctorController.getListPatientOnline);
+  router.get("/api/get-list-patient-at-home",doctorController.getListPatientAtHome)
+  router.get("/api/get-list-patient-s7", doctorController.getListPatientS7),
+  router.get("/api/get-blacklist-email", doctorController.checkBlacklist)
   return app.use("/", router);
 };
 
