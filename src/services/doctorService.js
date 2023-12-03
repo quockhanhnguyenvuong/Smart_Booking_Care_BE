@@ -579,6 +579,43 @@ let sendWarning = (data) => {
     }
   });
 };
+let checkEmailIsBlock = async (email) => {
+  try {
+    if (!email) {
+      return {
+        errCode: 1,
+        errMessage: "Missing required parameter",
+      };
+    } else {
+      const count = await db.Blacklists.count({
+        where: {
+          email: email,
+        },
+      });
+
+      if (count > 2) {
+        return {
+          errCode: 0,
+          isBlocked: true,
+          message: 'Email is blocked because it appeared more than 3 times in the blacklist.'
+        };
+      } else {
+        return {
+          errCode: 0,
+          isBlocked: false,
+          message: 'Email is not blocked.'
+        };
+      }
+    }
+  } catch (e) {
+    return {
+      errCode: 2,
+      errMessage: 'Error from server',
+      error: e.message
+    };
+  }
+};
+
 let checkBlacklist = (doctorId, email) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -1040,4 +1077,5 @@ module.exports = {
   getListPatientAtHome: getListPatientAtHome,
   getCancel: getCancel,
   checkBlacklist: checkBlacklist,
+  checkEmailIsBlock: checkEmailIsBlock
 };

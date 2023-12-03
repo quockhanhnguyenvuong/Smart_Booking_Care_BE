@@ -85,6 +85,7 @@ let initWebRoutes = (app) => {
   router.get("/api/get-list-patient-at-home",doctorController.getListPatientAtHome)
   router.get("/api/get-list-patient-s7", doctorController.getListPatientS7),
   router.get("/api/get-blacklist-email", doctorController.checkBlacklist)
+  router.get("/api/get-email-is-block", doctorController.checkEmailIsBlock)
   return app.use("/", router);
 };
 

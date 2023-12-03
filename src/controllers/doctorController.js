@@ -209,7 +209,18 @@ let checkBlacklist = async (req, res) => {
     });
   }
 }
-
+let checkEmailIsBlock = async (req, res) => {
+  try {
+    let infor = await doctorService.checkEmailIsBlock(req.query.email);
+    return res.status(200).json(infor);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: "Error from server",
+    });
+  }
+}
 let sendRefuse = async (req, res) => {
   try {
     let infor = await doctorService.sendRefuse(req.body);
@@ -278,5 +289,7 @@ module.exports = {
   getListPatientAtHome: getListPatientAtHome,
   getCancel: getCancel,
   getListPatientS7: getListPatientS7,
-  checkBlacklist: checkBlacklist
+  checkBlacklist: checkBlacklist,
+  checkEmailIsBlock: checkEmailIsBlock
+
 };

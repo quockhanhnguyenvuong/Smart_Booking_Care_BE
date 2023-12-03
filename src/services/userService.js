@@ -1,5 +1,6 @@
 import db from "../models/index";
 import bcrypt from "bcryptjs";
+import doctorService from "./doctorService"
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -38,6 +39,12 @@ let handleUserLogin = (email, password) => {
         });
         if (user) {
           //compare password
+          let isBlocked = await doctorService.checkEmailIsBlock(email);
+          if (isBlocked.isBlocked) {
+            userData.errCode = 4;
+            userData.errMessage = "Email của bạn đã bị khóa!";
+            resolve(userData);
+          }
           let check = await bcrypt.compareSync(password, user.password);
           if (check) {
             userData.errCode = 0;
@@ -46,16 +53,16 @@ let handleUserLogin = (email, password) => {
             userData.user = user;
           } else {
             userData.errCode = 3;
-            userData.errMessage = "Wrong password!";
+            userData.errMessage = "Sai mật khẩu!";
           }
         } else {
           userData.errCode = 2;
-          userData.errMessage = `User's not found `;
+          userData.errMessage = `Người dùng không tồn tại `;
         }
       } else {
         //return error
         userData.errCode = 1;
-        userData.errMessage = `Your's Email isn't exist in your system`;
+        userData.errMessage = `Email của bạn không có trong hệ thống`;
       }
       resolve(userData);
     } catch (e) {
