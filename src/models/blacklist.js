@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Booking extends Model {
+  class Blacklists extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,40 +9,35 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Booking.belongsTo(models.User, {
+      Blacklists.belongsTo(models.User, {
         foreignKey: "patientId",
         targetKey: "id",
         as: "patientData",
       });
-      Booking.belongsTo(models.Allcode, {
-        foreignKey: "timeType",
-        targetKey: "keyMap",
-        as: "timeTypeDataPatient",
-      });
-      Booking.belongsTo(models.Allcode, {
+
+      Blacklists.belongsTo(models.Allcode, {
         foreignKey: "statusId",
         targetKey: "keyMap",
         as: "statusTypeData",
       });
+      Blacklists.hasOne(models.Booking, {
+        foreignKey: "statusId",
+      });
+      Blacklists.belongsTo(models.User, { foreignKey: "doctorId" });
     }
   }
-  Booking.init(
+  Blacklists.init(
     {
-      statusId: DataTypes.STRING,
-      doctorId: DataTypes.INTEGER,
       patientId: DataTypes.INTEGER,
-      date: DataTypes.STRING,
-      timeType: DataTypes.STRING,
-      token: DataTypes.STRING,
-      bookingType: DataTypes.STRING,
-      reason: DataTypes.STRING,
-      // yearOld: DataTypes.STRING,
-      address: DataTypes.TEXT("long"),
+      email: DataTypes.STRING,
+      doctorId: DataTypes.INTEGER,
+      address: DataTypes.STRING,
+      statusId: DataTypes.STRING,
     },
     {
       sequelize,
-      modelName: "Booking",
+      modelName: "Blacklists",
     },
   );
-  return Booking;
+  return Blacklists;
 };

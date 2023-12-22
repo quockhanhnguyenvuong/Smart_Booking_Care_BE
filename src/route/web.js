@@ -21,18 +21,19 @@ let initWebRoutes = (app) => {
 
   //user
   router.post("/api/login", userController.handleLogin);
+
   router.get("/api/get-all-users", userController.handleGetAllUsers);
   router.post("/api/create-new-user", userController.handleCreateNewUser);
   router.put("/api/edit-user", userController.handleEditUser);
   router.delete("/api/delete-user", userController.handleDeleteUser);
   router.get("/api/allcode", userController.getAllcode);
   router.post("/api/create-new-password", userController.createNewPassword);
-  router.post("/api/create-new-password", userController.createNewPassword);
   router.post("/api/check-email", userController.handleCheckAccount);
   router.post(
     "/api/check-OTP-reset-Password",
     userController.handleResetPassword,
   );
+  router.post("/api/check-reset-password", userController.checkPassword);
 
   //doctor
   router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);
@@ -42,6 +43,7 @@ let initWebRoutes = (app) => {
     "/api/get-detail-doctor-by-id",
     doctorController.getDetailDoctorById,
   );
+  router.get("/api/get-email-is-block", doctorController.checkEmailIsBlock);
   router.post("/api/bulk-create-schedule", doctorController.bulkCreateSchedule);
   router.get(
     "/api/get-schedule-doctor-by-date",
@@ -60,8 +62,24 @@ let initWebRoutes = (app) => {
     doctorController.getListPatientForDoctor,
   );
   router.post("/api/send-remedy", doctorController.sendRemedy);
+  router.post("/api/get-cancel", doctorController.getCancel);
+  router.post("/api/send-warning", doctorController.sendWarning);
   router.post("/api/send-refuse", doctorController.sendRefuse);
   router.post("/api/get-confirm", doctorController.getConfirm);
+  router.get(
+    "/api/get-patient-for-history",
+    doctorController.getListPatientForHistory,
+  );
+  router.get(
+    "/api/get-list-patient-online",
+    doctorController.getListPatientOnline,
+  );
+  router.get(
+    "/api/get-list-patient-at-home",
+    doctorController.getListPatientAtHome,
+  );
+  router.get("/api/get-list-patient-s7", doctorController.getListPatientS7),
+    router.get("/api/get-blacklist-email", doctorController.checkBlacklist);
 
   //patient
   router.post(

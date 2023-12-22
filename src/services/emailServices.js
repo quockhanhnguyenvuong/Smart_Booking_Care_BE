@@ -94,8 +94,7 @@ let getBodyHTMLEmailRefuse = (dataSend) => {
     <h3>Xin chào ${dataSend.patientName}!</h3>
     <p>Bạn nhận được email này vì đã đặt lịch khám bệnh trên System Booking A Medical Appointment thất bại!</p>
     <p>Vì lý do: ${dataSend.reason}</p>
-    <p>Hẹn gặp ${dataSend.patientName} vào lúc: ${dataSend.date} </p>
-
+    <p>Hẹn gặp lại bạn lần sau </p>
     <div>Xin chân thành cảm ơn!</div>
   `; // html body
   return result;
@@ -131,9 +130,94 @@ let sendAttachmentRefuse = async (dataSend) => {
     }
   });
 };
+let getBodyHTMLEmailBlackList = (dataSend, doctorName) => {
+  let result = "";
+  result = `
+    <h3>Cảnh báo ${dataSend.patientName}!</h3>
+    <p>Bạn vừa bị thêm vào BlackList</p>
+    <p>Bạn sẽ không thể đặt lịch khám bệnh  của bác sĩ ${doctorName} </p>
+    <p>Vì lý do: ${dataSend.reason} </p>
+    <p>Tài khoản của bạn sẽ bị khóa nếu bạn nhận ba lần report!!</p>
+    <p>Nếu có thắc mắc hay phản hồi, xin liên hệ với quản trị viên</p>
+    <div>Xin chân thành cảm ơn!</div>
+  `; // html body
+  return result;
+};
+// send refuse
+let sendWarnBlackList = async (dataSend, doctorName) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      // create reusable transporter object using the default SMTP transport
+      let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+          user: process.env.EMAIL_APP, // generated ethereal user
+          pass: process.env.EMAIL_APP_PASSWORD, // generated ethereal password
+        },
+      });
+
+      // send mail with defined transport object
+      let info = await transporter.sendMail({
+        from: '"System Booking A Medical Appointment " <bookingdoctor3@gmail.com>', // sender address
+        to: dataSend.email, // list of receivers
+        subject: "Cảnh báo tài khoản", // Subject line
+        html: getBodyHTMLEmailBlackList(dataSend, doctorName),
+      });
+      // console.log("check infor send email: ");
+      // console.log(info);
+      resolve(true);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+let getBodyHTMLEmailIsBlocked = (dataSend, doctorName) => {
+  let result = "";
+  result = `
+    <h3>Thông báo khóa tài khoản !</h3>
+    <p>Email của bạn đã bị khóa bởi Booking Doctor vì đã vi phạm điều khoản</p>
+    <b>Bạn sẽ không thể đăng nhập Booking Doctor nữa</b>
+    <p>Nếu có thắc mắc hay phản hồi, xin liên hệ với quản trị viên</p>
+  `; // html body
+  return result;
+};
+// send refuse
+let sendWarnEmailIsBlocked = async (dataSend, doctorName) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      // create reusable transporter object using the default SMTP transport
+      let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+          user: process.env.EMAIL_APP, // generated ethereal user
+          pass: process.env.EMAIL_APP_PASSWORD, // generated ethereal password
+        },
+      });
+
+      // send mail with defined transport object
+      let info = await transporter.sendMail({
+        from: '"System Booking A Medical Appointment " <bookingdoctor3@gmail.com>', // sender address
+        to: dataSend.email, // list of receivers
+        subject: "Khóa tài khoản", // Subject line
+        html: getBodyHTMLEmailIsBlocked(dataSend, doctorName),
+      });
+      // console.log("check infor send email: ");
+      // console.log(info);
+      resolve(true);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 
 module.exports = {
   sendSimpleEmail: sendSimpleEmail,
   sendAttachmentRemedy: sendAttachmentRemedy,
   sendAttachmentRefuse: sendAttachmentRefuse,
+  sendWarnBlackList: sendWarnBlackList,
+  sendWarnEmailIsBlocked: sendWarnEmailIsBlocked,
 };

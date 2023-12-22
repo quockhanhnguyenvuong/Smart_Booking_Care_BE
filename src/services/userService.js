@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import emailServices from "./emailServices";
 import nodemailer from "nodemailer";
 import { trim } from "lodash";
+import doctorService from "./doctorService";
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -40,32 +41,38 @@ let handleUserLogin = (email, password) => {
           where: { email: email },
           raw: true,
         });
-
         if (user) {
           //compare password
+          let isBlocked = await doctorService.checkEmailIsBlock(email);
+          if (isBlocked.isBlocked) {
+            userData.errCode = 4;
+            userData.errMessage = "Email của bạn đã bị khóa!";
+            resolve(userData);
+          }
           let check = await bcrypt.compareSync(password, user.password);
           if (check) {
             userData.errCode = 0;
             userData.errMessage = "OK";
             delete user.password;
             userData.user = user;
+
+            if (user.image) {
+              userData.user.image = Buffer.from(user.image, "base64").toString(
+                "binary",
+              );
+            }
           } else {
             userData.errCode = 3;
-            userData.errMessage = "Wrong password!";
-          }
-          if (user.image) {
-            userData.user.image = Buffer.from(user.image, "base64").toString(
-              "binary",
-            );
+            userData.errMessage = "Sai mật khẩu!";
           }
         } else {
           userData.errCode = 2;
-          userData.errMessage = `User's not found `;
+          userData.errMessage = `Người dùng không tồn tại `;
         }
       } else {
         //return error
         userData.errCode = 1;
-        userData.errMessage = `Your's Email isn't exist in your system`;
+        userData.errMessage = `Email không có trong hệ thống`;
       }
       resolve(userData);
     } catch (e) {
@@ -144,7 +151,7 @@ let createNewUser = (data) => {
       if (check === true) {
         resolve({
           errCode: 1,
-          message: "Your email is already in use, please try another email!",
+          message: "Email này đã được sử dụng, vui lòng chọn email khác",
         });
       } else {
         let hashPasswordFromBcrypt = await hashUserPassword(data.password);
@@ -206,7 +213,7 @@ let deleteUser = (userId) => {
     if (!user) {
       resolve({
         errCode: 2,
-        errMessage: "The user is not exist!",
+        errMessage: "Người dùng không tồn tại",
       });
     }
     await db.User.destroy({
@@ -215,7 +222,7 @@ let deleteUser = (userId) => {
 
     resolve({
       errCode: 0,
-      message: "The user is deleted!",
+      message: "Xóa người dùng thành công",
     });
   });
 };
@@ -226,7 +233,7 @@ let updateUserData = (data) => {
       if (!data.id) {
         resolve({
           errCode: 2,
-          message: "Missing requied parameters!",
+          message: "Vui lòng nhập đủ dữ liệu",
         });
       }
       let user = await db.User.findOne({
@@ -254,12 +261,12 @@ let updateUserData = (data) => {
 
         resolve({
           errCode: 0,
-          message: "Update the user succeeds!",
+          message: "Cập nhật người dùng thành công",
         });
       } else {
         resolve({
           errCode: 1,
-          errMessage: "User is not found!",
+          errMessage: "Người dùng không tồn tại",
         });
       }
     } catch (e) {
@@ -274,7 +281,7 @@ let getAllCodeService = (typeInput) => {
       if (!typeInput) {
         resolve({
           errCode: 1,
-          errMessage: "Missing requied parameters",
+          errMessage: "Vui lòng nhập đủ dữ liệu",
         });
       } else {
         let res = {};
@@ -307,12 +314,12 @@ let checkAccountUser = (data) => {
         await updateUserCode(OTP, data.email);
         resolve({
           errCode: 0,
-          message: "OK",
+          message: "Send finish",
         });
       } else {
         resolve({
           errCode: 1,
-          message: "The email you entered dosen't exist in the system!!!",
+          message: "Email không tồn tại trong hệ thống",
         });
       }
     } catch (e) {
@@ -392,8 +399,8 @@ let handleResetPassword = (data) => {
       let check = await checkUserCode(data.code, data.email);
 
       if (check === true) {
-        console.log("mã OTP đúng: ", data.code);
-        console.log("email đúng: ", data.email);
+        // console.log("mã OTP đúng: ", data.code);
+        // console.log("email đúng: ", data.email);
 
         //update password
         await resetUserPassword(data);
@@ -405,7 +412,7 @@ let handleResetPassword = (data) => {
       } else {
         resolve({
           errCode: 1,
-          message: "Code OTP Wrong!!!",
+          message: "Mã OTP sai!!!",
         });
       }
     } catch (e) {
@@ -422,7 +429,7 @@ let resetUserPassword = (data) => {
       if (!data.email) {
         resolve({
           errCode: 2,
-          message: "Missing requied parameters!",
+          message: "Vui lòng nhập đủ dữ liệu",
         });
       }
       let user = await db.User.findOne({
@@ -435,12 +442,38 @@ let resetUserPassword = (data) => {
         await user.save();
         resolve({
           errCode: 0,
-          message: "Update the user succeeds!",
+          message: "Cập nhật người dùng thành công",
         });
       } else {
         resolve({
           errCode: 1,
-          errMessage: "User is not found!",
+          errMessage: "Người dùng không tồn tại",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let checkPassword = (data) => {
+  return new Promise(async (resolve, reject) => {
+    console.log("password1: ", data.data.newPassword);
+    console.log("password2: ", data.data.checkNewPassword);
+    try {
+      let password1 = data.data.newPassword;
+      let password2 = data.data.checkNewPassword;
+      if (password1 === password2) {
+        //update password
+        // await resetUserPassword(data);
+        resolve({
+          errCode: 0,
+          message: "2 password oke",
+        });
+      } else {
+        resolve({
+          errCode: 1,
+          message: "2 password không trùng nhau!!!",
         });
       }
     } catch (e) {
@@ -461,4 +494,5 @@ module.exports = {
   updateUserCode: updateUserCode,
   handleResetPassword: handleResetPassword,
   resetUserPassword: resetUserPassword,
+  checkPassword: checkPassword,
 };
